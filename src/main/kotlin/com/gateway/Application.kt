@@ -2,13 +2,11 @@ package com.gateway
 
 import com.gateway.Constant.COROUTINE_JOB_DEAD
 import com.gateway.Constant.GATEWAY_CONNECTOR
-import com.gateway.Constant.GATEWAY_INITIALIZATION_FAILED
 import com.gateway.Constant.GATEWAY_URL
 import com.gateway.Constant.HEARTBEAT_OK
 import com.gateway.Constant.PING_OK
 import com.gateway.Constant.PONG_OK
 import com.gateway.Constant.WEBSOCKETS_CONNECTION_LOST
-import com.gateway.exception.GatewayInitializerException
 import com.gateway.model.initializer.init.GatewayInitializer
 import com.gateway.model.initializer.pingpong.Ping
 import com.gateway.model.initializer.pingpong.Pong
@@ -58,18 +56,13 @@ private suspend fun handleWebsocketCommunication(client: HttpClient, log: Logger
                 delay(gatewayResponse.d.heartbeatInterval)
                 val jsonPing = Gson().toJson(Ping(d = count1++))
                 send(jsonPing)
-                log.info("$PING_OK --> $jsonPing  " +
-                        Thread.currentThread().name +
-                        " stack: ${Thread.currentThread().stackTrace.size}"
+                log.info(
+                    "$PING_OK --> $jsonPing  " +
+                            Thread.currentThread().name +
+                            " stack: ${Thread.currentThread().stackTrace.size}"
                 )
                 getPong(log)
             }
-        } ?: throw GatewayInitializerException().also {
-            log.info("$GATEWAY_INITIALIZATION_FAILED  " +
-                    Thread.currentThread().name +
-                    " stack: ${Thread.currentThread().stackTrace.size}"
-            )
-            client.close()
         }
     }
     client.close()
@@ -77,20 +70,24 @@ private suspend fun handleWebsocketCommunication(client: HttpClient, log: Logger
 
 private suspend fun DefaultClientWebSocketSession.getHeartBeat(log: Logger): GatewayInitializer? =
     (incoming.receive() as? Frame.Text)?.readText()?.let { gatewayHeartBeat ->
-        Gson().fromJson(gatewayHeartBeat, GatewayInitializer::class.java)?.also {
-            log.info("$HEARTBEAT_OK${ZonedDateTime.now()} --> " +
-                    "${it.d.heartbeatInterval}" +
-                    Thread.currentThread().name +
-                    " stack: ${Thread.currentThread().stackTrace.size}")
+        val a = Gson().fromJson(gatewayHeartBeat, GatewayInitializer::class.java)
+        a?.also {
+            log.info(
+                "$HEARTBEAT_OK${ZonedDateTime.now()} --> " +
+                        "${it.d.heartbeatInterval} " +
+                        Thread.currentThread().name +
+                        " stack: ${Thread.currentThread().stackTrace.size}"
+            )
         }
     }
 
 private suspend fun DefaultClientWebSocketSession.getPong(log: Logger): Pong? =
     (incoming.receive() as? Frame.Text)?.readText()?.let { pong ->
-        Gson().fromJson(pong, Pong::class.java)?.also {
-            log.info("$PONG_OK${ZonedDateTime.now()} " + "--> ${it.op}  + " +
-                    Thread.currentThread().name +
-                    " stack: ${Thread.currentThread().stackTrace.size}"
+        Gson().fromJson(pong, Pong::class.java).also {
+            log.info(
+                "$PONG_OK${ZonedDateTime.now()} " + "--> ${it.op}  + " +
+                        Thread.currentThread().name +
+                        " stack: ${Thread.currentThread().stackTrace.size}"
             )
         }
     }
