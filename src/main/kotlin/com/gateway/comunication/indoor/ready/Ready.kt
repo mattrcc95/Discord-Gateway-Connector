@@ -15,7 +15,7 @@ data class Ready(
     @SerializedName("session_id") val sessionId: String = "",
     @SerializedName("shard") val shard: List<Int>? = null,
     @SerializedName("application") val application: ApplicationDetails
-): GatewayIndoor() {
+): GatewayIndoor {
     companion object {
         suspend fun DefaultClientWebSocketSession.receiveReady(log: Logger): Ready? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { readyResponse ->
