@@ -20,7 +20,7 @@ suspend fun main() {
     }
 
     coroutineScope {
-        launch(Dispatchers.IO) {
+        launch(Dispatchers.Default) {
             stayAlive(client, log)
         }
     }
@@ -29,12 +29,16 @@ suspend fun main() {
 
 private suspend fun stayAlive(client: HttpClient, log: Logger) {
     try {
-        SingletonConnection.handleWebsocketsConnection(client, log)
+        SingletonConnection.holdWebsocketsConnection(client, log)
     } catch (ex: CancellationException) {
-        log.info(COROUTINE_JOB_DEAD)
-        stayAlive(client, log)
+        restart(log, client, COROUTINE_JOB_DEAD)
     } catch (ex: ClosedReceiveChannelException) {
-        log.info(WEBSOCKETS_CONNECTION_LOST)
-        stayAlive(client, log)
+        restart(log, client, WEBSOCKETS_CONNECTION_LOST)
     }
+}
+
+private suspend fun restart(log: Logger, client: HttpClient, message: String) {
+    log.info(message)
+    SingletonConnection.interactions = 0
+    stayAlive(client, log)
 }
