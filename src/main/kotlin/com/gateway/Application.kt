@@ -7,9 +7,9 @@ import com.gateway.Constant.HEARTBEAT_OK
 import com.gateway.Constant.PING_OK
 import com.gateway.Constant.PONG_OK
 import com.gateway.Constant.WEBSOCKETS_CONNECTION_LOST
-import com.gateway.model.initializer.init.GatewayInitializer
-import com.gateway.model.initializer.pingpong.Ping
-import com.gateway.model.initializer.pingpong.Pong
+import com.gateway.comunication.indoor.hello.Op10
+import com.gateway.comunication.inoutdoor.Op1
+import com.gateway.comunication.indoor.Op11
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -54,7 +54,7 @@ private suspend fun handleWebsocketCommunication(client: HttpClient, log: Logger
         this.getHeartBeat(log)?.let { gatewayResponse ->
             while (true) {
                 delay(gatewayResponse.d.heartbeatInterval)
-                val jsonPing = Gson().toJson(Ping(d = count1++))
+                val jsonPing = Gson().toJson(Op1(d = count1++))
                 send(jsonPing)
                 log.info(
                     "$PING_OK --> $jsonPing  " +
@@ -68,9 +68,9 @@ private suspend fun handleWebsocketCommunication(client: HttpClient, log: Logger
     client.close()
 }
 
-private suspend fun DefaultClientWebSocketSession.getHeartBeat(log: Logger): GatewayInitializer? =
+private suspend fun DefaultClientWebSocketSession.getHeartBeat(log: Logger): Op10? =
     (incoming.receive() as? Frame.Text)?.readText()?.let { gatewayHeartBeat ->
-        val a = Gson().fromJson(gatewayHeartBeat, GatewayInitializer::class.java)
+        val a = Gson().fromJson(gatewayHeartBeat, Op10::class.java)
         a?.also {
             log.info(
                 "$HEARTBEAT_OK${ZonedDateTime.now()} --> " +
@@ -81,9 +81,9 @@ private suspend fun DefaultClientWebSocketSession.getHeartBeat(log: Logger): Gat
         }
     }
 
-private suspend fun DefaultClientWebSocketSession.getPong(log: Logger): Pong? =
+private suspend fun DefaultClientWebSocketSession.getPong(log: Logger): Op11? =
     (incoming.receive() as? Frame.Text)?.readText()?.let { pong ->
-        Gson().fromJson(pong, Pong::class.java).also {
+        Gson().fromJson(pong, Op11::class.java).also {
             log.info(
                 "$PONG_OK${ZonedDateTime.now()} " + "--> ${it.op}  + " +
                         Thread.currentThread().name +

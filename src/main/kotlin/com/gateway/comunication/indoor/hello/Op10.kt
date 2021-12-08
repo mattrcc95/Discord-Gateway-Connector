@@ -1,8 +1,8 @@
-package com.gateway.model.initializer.init
+package com.gateway.comunication.indoor.hello
 
 import com.google.gson.annotations.SerializedName
 
-data class GatewayInitializer(
+data class Op10(
     @SerializedName("op") val op: Int = 0,
     @SerializedName("d") val d: Heartbeat = Heartbeat(),
     @SerializedName("s") val s: Int? = null,

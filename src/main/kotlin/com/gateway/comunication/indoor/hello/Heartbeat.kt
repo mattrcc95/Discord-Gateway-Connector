@@ -1,4 +1,4 @@
-package com.gateway.model.initializer.init
+package com.gateway.comunication.indoor.hello
 
 import com.google.gson.annotations.SerializedName
 
