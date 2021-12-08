@@ -1,11 +1,10 @@
 package com.gateway.comunication.indoor.hello
 
-import com.gateway.Constant
+import com.gateway.Constant.HEARTBEAT_OK
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import java.time.ZonedDateTime
 import java.util.logging.Logger
 
 data class Op10(
@@ -19,12 +18,7 @@ data class Op10(
             (incoming.receive() as? Frame.Text)?.readText()?.let { op10HeartbeatResponse ->
                 val heartbeat = Gson().fromJson(op10HeartbeatResponse, Op10::class.java)
                 heartbeat?.also {
-                    log.info(
-                        "${Constant.HEARTBEAT_OK}${ZonedDateTime.now()} --> " +
-                                "${it.d.heartbeatInterval} " +
-                                Thread.currentThread().name +
-                                " stack: ${Thread.currentThread().stackTrace.size}"
-                    )
+                    log.info("$HEARTBEAT_OK --> ${it.d.heartbeatInterval}")
                 }
             }
     }
