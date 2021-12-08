@@ -2,14 +2,10 @@ package com.gateway
 
 import com.gateway.Constant.COROUTINE_JOB_DEAD
 import com.gateway.Constant.GATEWAY_CONNECTOR
-import com.gateway.Constant.GATEWAY_URL
-import com.gateway.Constant.HEARTBEAT_OK
-import com.gateway.Constant.PING_OK
-import com.gateway.Constant.PONG_OK
 import com.gateway.Constant.WEBSOCKETS_CONNECTION_LOST
-import com.gateway.comunication.indoor.hello.Op10
-import com.gateway.comunication.inoutdoor.Op1
 import com.gateway.comunication.indoor.Op11
+import com.gateway.comunication.indoor.hello.Op10
+import com.gateway.connection.ConnectionHandler
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -38,7 +34,7 @@ suspend fun main() {
 
 private suspend fun stayAlive(client: HttpClient, log: Logger) {
     try {
-        handleWebsocketCommunication(client, log, 0)
+        ConnectionHandler.handleWebsocketsConnection(client, log)
     } catch (ex: CancellationException) {
         log.info("$COROUTINE_JOB_DEAD + ${Thread.currentThread().name} + stack: ${Thread.currentThread().stackTrace.size}")
         stayAlive(client, log)
@@ -47,47 +43,3 @@ private suspend fun stayAlive(client: HttpClient, log: Logger) {
         stayAlive(client, log)
     }
 }
-
-private suspend fun handleWebsocketCommunication(client: HttpClient, log: Logger, count: Int) {
-    var count1 = count
-    client.webSocket(urlString = GATEWAY_URL) {
-        this.getHeartBeat(log)?.let { gatewayResponse ->
-            while (true) {
-                delay(gatewayResponse.d.heartbeatInterval)
-                val jsonPing = Gson().toJson(Op1(d = count1++))
-                send(jsonPing)
-                log.info(
-                    "$PING_OK --> $jsonPing  " +
-                            Thread.currentThread().name +
-                            " stack: ${Thread.currentThread().stackTrace.size}"
-                )
-                getPong(log)
-            }
-        }
-    }
-    client.close()
-}
-
-private suspend fun DefaultClientWebSocketSession.getHeartBeat(log: Logger): Op10? =
-    (incoming.receive() as? Frame.Text)?.readText()?.let { gatewayHeartBeat ->
-        val a = Gson().fromJson(gatewayHeartBeat, Op10::class.java)
-        a?.also {
-            log.info(
-                "$HEARTBEAT_OK${ZonedDateTime.now()} --> " +
-                        "${it.d.heartbeatInterval} " +
-                        Thread.currentThread().name +
-                        " stack: ${Thread.currentThread().stackTrace.size}"
-            )
-        }
-    }
-
-private suspend fun DefaultClientWebSocketSession.getPong(log: Logger): Op11? =
-    (incoming.receive() as? Frame.Text)?.readText()?.let { pong ->
-        Gson().fromJson(pong, Op11::class.java).also {
-            log.info(
-                "$PONG_OK${ZonedDateTime.now()} " + "--> ${it.op}  + " +
-                        Thread.currentThread().name +
-                        " stack: ${Thread.currentThread().stackTrace.size}"
-            )
-        }
-    }
