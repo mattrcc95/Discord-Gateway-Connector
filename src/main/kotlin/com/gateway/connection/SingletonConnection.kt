@@ -22,8 +22,7 @@ object SingletonConnection {
         client.webSocket(urlString = GATEWAY_URL) {
             this.receiveOp10Heartbeat(log)?.let { gatewayResponse ->
                 while (true) {
-//                    delay(gatewayResponse.d.heartbeatInterval)
-                    delay(5000L)
+                    delay(gatewayResponse.d.heartbeatInterval)
                     sendToGateway(log)
                     receiveFromGateway(log)
                 }
@@ -38,17 +37,16 @@ object SingletonConnection {
 
 
     private suspend fun DefaultClientWebSocketSession.sendToGateway(log: Logger) {
-        if(interactions != 1){
+        if (interactions != 1) {
             val op1 = Gson().toJson(Op1(d = ++interactions))
             send(op1)
             log.info("sent: $op1 --- $interactions")
-        } else{
+        } else {
             val op2Identification = Gson().toJson(Op2())
             send(op2Identification)
             interactions++
             log.info("sent: $op2Identification --- $interactions")
         }
     }
-
 
 }

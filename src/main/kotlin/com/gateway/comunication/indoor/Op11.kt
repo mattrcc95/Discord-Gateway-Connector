@@ -8,7 +8,7 @@ import io.ktor.http.cio.websocket.*
 import java.util.logging.Logger
 
 data class Op11(
-    @SerializedName("op") val op: Int = 11
+    @SerializedName("op") val op: Int
 ): GatewayIndoor {
     companion object {
         suspend fun DefaultClientWebSocketSession.receiveOp11(log: Logger): Op11? =

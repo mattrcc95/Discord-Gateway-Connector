@@ -8,10 +8,10 @@ import io.ktor.http.cio.websocket.*
 import java.util.logging.Logger
 
 data class Op10(
-    @SerializedName("op") val op: Int = 10,
-    @SerializedName("d") val d: Heartbeat = Heartbeat(),
-    @SerializedName("s") val s: Int? = null,
-    @SerializedName("t") val t: Int? = null,
+    @SerializedName("op") val op: Int,
+    @SerializedName("d") val d: Heartbeat,
+    @SerializedName("s") val s: Int?,
+    @SerializedName("t") val t: Int?,
 ) {
     companion object {
         suspend fun DefaultClientWebSocketSession.receiveOp10Heartbeat(log: Logger): Op10? =

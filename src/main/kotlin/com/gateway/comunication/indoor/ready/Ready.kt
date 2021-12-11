@@ -9,13 +9,11 @@ import io.ktor.http.cio.websocket.*
 import java.util.logging.Logger
 
 data class Ready(
-    @SerializedName("v") val v: String = "",
-    @SerializedName("user") val user: UserProperties,
-    @SerializedName("guilds") val unavailbaleGuidls: List<UnavailableGuilds> = emptyList(),
-    @SerializedName("session_id") val sessionId: String = "",
-    @SerializedName("shard") val shard: List<Int>? = null,
-    @SerializedName("application") val application: ApplicationDetails
-): GatewayIndoor {
+    @SerializedName("t") val t: String,
+    @SerializedName("s") val s: Int,
+    @SerializedName("op") val op: Int,
+    @SerializedName("d") val attributes: ReadyAttributes
+) : GatewayIndoor {
     companion object {
         suspend fun DefaultClientWebSocketSession.receiveReady(log: Logger): Ready? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { readyResponse ->
@@ -23,6 +21,5 @@ data class Ready(
                     log.info("${Constant.READY_OK} --> ${Gson().toJson(it)}")
                 }
             }
-
     }
 }
