@@ -1,7 +1,6 @@
 package com.gateway.connection
 
 import com.gateway.Constant.GATEWAY_URL
-import com.gateway.Constant.OP1_OK
 import com.gateway.comunication.indoor.GatewayIndoor
 import com.gateway.comunication.indoor.Op11.Companion.receiveOp11
 import com.gateway.comunication.indoor.hello.Op10.Companion.receiveOp10Heartbeat
@@ -24,7 +23,7 @@ object SingletonConnection {
             this.receiveOp10Heartbeat(log)?.let { gatewayResponse ->
                 while (true) {
 //                    delay(gatewayResponse.d.heartbeatInterval)
-                    delay(10000L)
+                    delay(5000L)
                     sendToGateway(log)
                     receiveFromGateway(log)
                 }
@@ -33,7 +32,9 @@ object SingletonConnection {
     }
 
     private suspend fun DefaultClientWebSocketSession.receiveFromGateway(log: Logger): GatewayIndoor? =
-        if(interactions != 2) receiveOp11(log) else receiveReady(log)
+        if (interactions != 2)
+            receiveOp11(log)
+        else receiveReady(log)
 
 
     private suspend fun DefaultClientWebSocketSession.sendToGateway(log: Logger) {
