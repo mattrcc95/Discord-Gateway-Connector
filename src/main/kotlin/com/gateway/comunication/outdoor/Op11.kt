@@ -9,7 +9,7 @@ import java.util.logging.Logger
 
 data class Op11(
     @SerializedName("op") val op: Int
-): GatewayIndoor {
+): GatewayOutdoor {
     companion object {
         suspend fun DefaultClientWebSocketSession.receiveOp11(log: Logger): Op11? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { op11Response ->

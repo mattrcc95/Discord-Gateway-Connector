@@ -1,7 +1,7 @@
 package com.gateway.connection
 
 import com.gateway.Constant.GATEWAY_URL
-import com.gateway.comunication.outdoor.GatewayIndoor
+import com.gateway.comunication.outdoor.GatewayOutdoor
 import com.gateway.comunication.outdoor.Op11.Companion.receiveOp11
 import com.gateway.comunication.outdoor.hello.Op10.Companion.receiveOp10Heartbeat
 import com.gateway.comunication.outdoor.ready.Ready.Companion.receiveReady
@@ -30,7 +30,7 @@ object SingletonConnection {
         }
     }
 
-    private suspend fun DefaultClientWebSocketSession.receiveFromGateway(log: Logger): GatewayIndoor? =
+    private suspend fun DefaultClientWebSocketSession.receiveFromGateway(log: Logger): GatewayOutdoor? =
         if (interactions != 2)
             receiveOp11(log)
         else receiveReady(log)
