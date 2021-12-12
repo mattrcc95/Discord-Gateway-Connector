@@ -14,7 +14,7 @@ data class Op11(
         suspend fun DefaultClientWebSocketSession.receiveOp11(log: Logger): Op11? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { op11Response ->
                 Gson().fromJson(op11Response, Op11::class.java).also {
-                    log.info("$PONG_OK --> ${op11Response}")
+                    log.info("$PONG_OK --> $op11Response")
                 }
             }
     }

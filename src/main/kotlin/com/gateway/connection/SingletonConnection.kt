@@ -35,17 +35,16 @@ object SingletonConnection {
             receiveOp11(log)
         else receiveReady(log)
 
-
     private suspend fun DefaultClientWebSocketSession.sendToGateway(log: Logger) {
         if (interactions != 1) {
             val op1 = Gson().toJson(Op1(d = ++interactions))
             send(op1)
-            log.info("sent: $op1 --- $interactions")
+            log.info("sent: $op1")
         } else {
             val op2Identification = Gson().toJson(Op2())
             send(op2Identification)
             interactions++
-            log.info("sent: $op2Identification --- $interactions")
+            log.info("sent: $op2Identification")
         }
     }
 

@@ -1,6 +1,7 @@
 package com.gateway.comunication.outdoor.ready
 
 import com.gateway.Constant
+import com.gateway.Constant.PONG_OK
 import com.gateway.comunication.outdoor.GatewayIndoor
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -18,7 +19,7 @@ data class Ready(
         suspend fun DefaultClientWebSocketSession.receiveReady(log: Logger): Ready? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { readyResponse ->
                 Gson().fromJson(readyResponse, Ready::class.java).also {
-                    log.info("${Constant.READY_OK} --> ${Gson().toJson(it)}")
+                    log.info("$PONG_OK --> $readyResponse")
                 }
             }
     }
