@@ -1,6 +1,6 @@
-package com.gateway.comunication.indoor
+package com.gateway.comunication.outdoor
 
-import com.gateway.Constant.OP11_OK
+import com.gateway.Constant.PONG_OK
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.ktor.client.features.websocket.*
@@ -14,7 +14,7 @@ data class Op11(
         suspend fun DefaultClientWebSocketSession.receiveOp11(log: Logger): Op11? =
             (incoming.receive() as? Frame.Text)?.readText()?.let { op11Response ->
                 Gson().fromJson(op11Response, Op11::class.java).also {
-                    log.info("$OP11_OK --> ${op11Response}")
+                    log.info("$PONG_OK --> ${op11Response}")
                 }
             }
     }

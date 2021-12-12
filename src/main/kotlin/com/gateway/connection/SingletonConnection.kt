@@ -1,12 +1,12 @@
 package com.gateway.connection
 
 import com.gateway.Constant.GATEWAY_URL
-import com.gateway.comunication.indoor.GatewayIndoor
-import com.gateway.comunication.indoor.Op11.Companion.receiveOp11
-import com.gateway.comunication.indoor.hello.Op10.Companion.receiveOp10Heartbeat
-import com.gateway.comunication.indoor.ready.Ready.Companion.receiveReady
+import com.gateway.comunication.outdoor.GatewayIndoor
+import com.gateway.comunication.outdoor.Op11.Companion.receiveOp11
+import com.gateway.comunication.outdoor.hello.Op10.Companion.receiveOp10Heartbeat
+import com.gateway.comunication.outdoor.ready.Ready.Companion.receiveReady
 import com.gateway.comunication.inoutdoor.Op1
-import com.gateway.comunication.outdoor.identify.Op2
+import com.gateway.comunication.indoor.identify.Op2
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*

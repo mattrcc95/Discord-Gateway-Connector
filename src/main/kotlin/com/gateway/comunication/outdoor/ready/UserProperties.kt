@@ -1,4 +1,4 @@
-package com.gateway.comunication.indoor.ready
+package com.gateway.comunication.outdoor.ready
 
 import com.google.gson.annotations.SerializedName
 

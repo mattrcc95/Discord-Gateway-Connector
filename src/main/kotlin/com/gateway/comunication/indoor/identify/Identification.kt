@@ -1,4 +1,4 @@
-package com.gateway.comunication.outdoor.identify
+package com.gateway.comunication.indoor.identify
 
 import com.google.gson.annotations.SerializedName
 import java.io.File

@@ -1,7 +1,7 @@
-package com.gateway.comunication.indoor.ready
+package com.gateway.comunication.outdoor.ready
 
 import com.gateway.Constant
-import com.gateway.comunication.indoor.GatewayIndoor
+import com.gateway.comunication.outdoor.GatewayIndoor
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.ktor.client.features.websocket.*

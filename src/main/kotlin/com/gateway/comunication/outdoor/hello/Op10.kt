@@ -1,4 +1,4 @@
-package com.gateway.comunication.indoor.hello
+package com.gateway.comunication.outdoor.hello
 
 import com.gateway.Constant.HEARTBEAT_OK
 import com.google.gson.Gson
