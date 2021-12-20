@@ -8,6 +8,6 @@ const val deviceName = "$" + "device"
 
 data class ConnectionProperty(
     @SerializedName(osName) val os: String = "Windows",
-    @SerializedName(browserName) val browser: String = "my library",
-    @SerializedName(deviceName) val device: String = "my library",
+    @SerializedName(browserName) val browser: String = "",
+    @SerializedName(deviceName) val device: String = "",
 )

@@ -5,7 +5,7 @@ import java.io.File
 
 data class Identification(
     @SerializedName("token") val token: String = File("src/main/resources/botInfo.txt").useLines { it.toList() }[0].trim(),
-    @SerializedName("intents") val intents: Int = 513,
+    @SerializedName("intents") val intents: Int = 258,
     @SerializedName("properties") val connectionProperty: ConnectionProperty = ConnectionProperty(),
     @SerializedName("compress") val compress: Boolean? = null,
     @SerializedName("large_threshold") val largeThreshold: Int? = null,
