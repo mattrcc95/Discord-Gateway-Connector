@@ -24,7 +24,6 @@ suspend fun main() {
             stayAlive(client, log)
         }
     }
-
 }
 
 private suspend fun stayAlive(client: HttpClient, log: Logger) {

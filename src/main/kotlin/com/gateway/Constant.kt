@@ -8,4 +8,6 @@ object Constant {
     const val PONG_OK = "pong ok"
     const val COROUTINE_JOB_DEAD = "coroutine job canceled, restarting..."
     const val WEBSOCKETS_CONNECTION_LOST = "gateway connection lost, restarting..."
+    const val CHUNK_HEADER = "GUILD_MEMBERS_CHUNK"
+    const val NULL_RESPONSE_FROM_GATEWAY = "response received was null"
 }

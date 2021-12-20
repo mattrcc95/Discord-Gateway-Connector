@@ -8,3 +8,4 @@ data class GuildUser(
     @SerializedName("discriminator") val discriminator: String,
     @SerializedName("avatar") val avatar: String,
 )
+
