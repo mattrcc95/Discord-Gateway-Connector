@@ -10,7 +10,6 @@ import com.gateway.comunication.outdoor.OutdoorData
 import com.gateway.comunication.outdoor.OutdoorParser
 import com.gateway.comunication.outdoor.OutdoorParser.parseHeartbeat
 import com.gateway.comunication.outdoor.guildmembers.GuildUser
-import com.gateway.comunication.outdoor.guildmembers.blmodel.ChunkUsersInfo
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
@@ -23,41 +22,43 @@ object SingletonConnection {
     const val alphabet = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z"
     val guildFile = File("src/main/resources/guilds.txt")
     var interactions: Int = 0
-    var guildChunks = 0
-    var memberSet = mutableSetOf<GuildUser>()
+    var membersList = mutableListOf<GuildUser>()
+    var totalMembers: Int = 0
     var messageIsNotSent: Boolean = true
 
     suspend fun holdWebsocketsConnection(client: HttpClient, log: Logger) {
         client.webSocket(urlString = GATEWAY_URL) {
-            parseHeartbeat(textFromGateway())
-                .let { heartbeat ->
-                    while (messageIsNotSent) {
-                        delay(heartbeat.d.heartbeatInterval)
-                        sendToGateway(log, guildId = guildFile.useLines { it.toList() }[0])
-                        receiveFromGateway().fillUsers()
-                    }
-                }
-        }
-    }
+            parseHeartbeat(textFromGateway()).let { heartbeat ->
+                while (messageIsNotSent) {
+                    log.info("heartbeat ${heartbeat.d.heartbeatInterval}")
+                    delay(5000L)
+                    sendToGateway(log, guildId = guildFile.useLines { it.toList() }[0])
 
-    private fun Pair<GatewayOutdoor?, OutdoorType>.fillUsers() {
-        if (this.second == GUILD_USERS) {
-            (this.first as ChunkUsersInfo).let { usersChunk ->
-                memberSet.addAll(usersChunk.data)
-                guildChunks += usersChunk.totalChunks
+                    receiveFromGateway(log).extractInterestingUserSet().also {
+                        membersList.let { fetchedList ->
+                            fetchedList.addAll(it)
+                            if (fetchedList.size <= totalMembers || fetchedList.size == 0) {
+                                log.info("not yet finished")
+                            } else {
+                                log.info("im done")
+                            }
+                        }
+                    }
+
+                }
             }
         }
     }
 
-    private suspend fun DefaultClientWebSocketSession.receiveFromGateway(): OutdoorData? =
+    private suspend fun DefaultClientWebSocketSession.receiveFromGateway(log: Logger): OutdoorData =
         textFromGateway().let { response ->
             return when (response.contains(CHUNK_HEADER)) {
                 true -> {
                     OutdoorParser.parseGuildUsers(response).also { usersChunk ->
-                        usersChunk
+                        usersChunk.also { totalMembers += it.chunk.data.members.size }
                     }
                 }
-                false -> null
+                false -> OutdoorParser.parseOp11(response, log)
             }
         }
 
@@ -85,8 +86,6 @@ object SingletonConnection {
     }
 
     private suspend fun DefaultClientWebSocketSession.textFromGateway(): String =
-        (incoming.receive() as? Frame.Text)?.readText()?.let {
-            it
-        } ?: throw  Exception("null string response from gateway")
+        (incoming.receive() as? Frame.Text)?.readText() ?: throw  Exception("null string response from gateway")
 
 }

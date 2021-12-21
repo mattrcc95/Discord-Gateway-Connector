@@ -7,5 +7,5 @@ data class GuildUser(
     @SerializedName("id") val userId: String,
     @SerializedName("discriminator") val discriminator: String,
     @SerializedName("avatar") val avatar: String,
-): GatewayOutdoor
+)
 

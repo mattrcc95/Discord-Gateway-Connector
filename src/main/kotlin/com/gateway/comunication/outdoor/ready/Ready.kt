@@ -7,4 +7,4 @@ data class Ready(
     @SerializedName("s") val s: Int,
     @SerializedName("op") val op: Int,
     @SerializedName("d") val attributes: ReadyAttributes
-) : GatewayOutdoor
+)

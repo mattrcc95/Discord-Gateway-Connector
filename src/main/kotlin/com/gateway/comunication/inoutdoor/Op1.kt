@@ -1,4 +1,5 @@
 package com.gateway.comunication.inoutdoor
 
-class Op1 {
-}
+import com.google.gson.annotations.SerializedName
+
+data class Op1(@SerializedName("op") val op: Int = 1, @SerializedName("d") val d: Int? = null)
