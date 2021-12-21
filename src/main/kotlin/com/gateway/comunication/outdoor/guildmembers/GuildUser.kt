@@ -1,4 +1,4 @@
-package com.gateway.comunication.outdoor.member
+package com.gateway.comunication.outdoor.guildmembers
 
 import com.google.gson.annotations.SerializedName
 
@@ -7,5 +7,5 @@ data class GuildUser(
     @SerializedName("id") val userId: String,
     @SerializedName("discriminator") val discriminator: String,
     @SerializedName("avatar") val avatar: String,
-)
+): GatewayOutdoor
 

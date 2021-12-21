@@ -1,4 +1,4 @@
-package com.gateway.comunication.outdoor.member
+package com.gateway.comunication.outdoor.guildmembers
 
 import com.google.gson.annotations.SerializedName
 
