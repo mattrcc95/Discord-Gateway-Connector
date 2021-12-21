@@ -6,14 +6,13 @@ import com.gateway.comunication.outdoor.hello.Heartbeat
 import com.google.gson.annotations.SerializedName
 
 sealed class OutdoorData {
-    fun extractInterestingUserSet(): List<GuildUser> =
+    fun extractInterestingUsers(): List<Pair<GuildUser, String?>> =
         when (this) {
             is GuildMemberChunkWithQueryPrefix -> {
-                chunk
-                    .data
+                chunk.data
                     .members
                     .filter { it.roles.isEmpty() && it.hoistedRole.isNullOrBlank() }
-                    .map { it.user }
+                    .map { it.user to it.nick }
             }
             else -> emptyList()
         }

@@ -7,4 +7,5 @@ object Constant {
     const val WEBSOCKETS_CONNECTION_LOST = "gateway connection lost, restarting..."
     const val CHUNK_HEADER = "GUILD_MEMBERS_CHUNK"
     const val NOT_PARSABLE = "not yet parsable object "
+    const val NULL_MESSAGE_FROM_GATEWAY = "null string response from gateway"
 }
