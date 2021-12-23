@@ -2,7 +2,9 @@ package com.websocketsclient.application
 
 object Constant {
     const val GATEWAY_URL = "wss://gateway.discord.gg/?v=9&encoding=json"
-    const val GATEWAY_CONNECTOR = "gateway connector bot client"
+    const val WEBSOCKETS_LOGGER = "websockets logger"
+    const val HTTPCLIENT_LOGGER = "http client logger"
+    const val APPLICATION_LOGGER = "application logger"
     const val CHUNK_HEADER = "GUILD_MEMBERS_CHUNK"
     const val NOT_PARSABLE = "not yet parsable object "
     const val NULL_MESSAGE_FROM_GATEWAY = "null string response from gateway"
