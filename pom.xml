@@ -4,15 +4,15 @@
     <groupId>com.gateway</groupId>
     <artifactId>com-gateway-discordgatewayconnector</artifactId>
     <version>0.0.1</version>
-    <name>com.gateway.discordgatewayconnector</name>
-    <description>com.gateway.discordgatewayconnector</description>
+    <name>com.websocketsclient.discordgatewayconnector</name>
+    <description>com.websocketsclient.discordgatewayconnector</description>
     <properties>
         <ktor_version>1.6.6</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin_version>1.5.0</kotlin_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <main.class>com.gateway.ApplicationKt</main.class>
+        <main.class>com.websocketsclient.ApplicationKt</main.class>
     </properties>
     <repositories>
     </repositories>

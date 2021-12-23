@@ -1,7 +1,7 @@
 package com
 
-import com.gateway.application.Constant.GATEWAY_CONNECTOR
-import com.gateway.application.connection.SingletonConnection
+import com.websocketsclient.application.Constant.GATEWAY_CONNECTOR
+import com.websocketsclient.application.connection.SingletonConnection
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.websocket.*
