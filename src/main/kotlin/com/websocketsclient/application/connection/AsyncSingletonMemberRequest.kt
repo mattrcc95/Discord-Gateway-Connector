@@ -51,7 +51,6 @@ object AsyncSingletonMemberRequest : BaseAsyncSingleton() {
                 this.cancel()
             }
         }
-        log.info("out of websockets")
         return membersList
     }
 

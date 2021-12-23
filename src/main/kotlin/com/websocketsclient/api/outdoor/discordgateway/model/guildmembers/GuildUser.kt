@@ -10,7 +10,7 @@ data class GuildUser(
     @SerializedName("avatar") val avatar: String?,
 ) {
     companion object {
-        suspend fun List<GuildUser>.logFinalResult(log: Logger) {
+        fun List<GuildUser>.logFinalResult(log: Logger) {
             log.info("FETCHED: ${this.size}")
             this.forEach {
                 log.info(it.toString())
